@@ -8,7 +8,10 @@ export class PollinationsApi implements ICredentialType {
 	name = 'pollinationsApi';
 	displayName = 'Pollinations API';
 	documentationUrl = 'https://enter.pollinations.ai';
-	icon = 'file:pollinations.svg' as const;
+	icon = {
+		light: 'file:icon-light-mode.png',
+		dark: 'file:icon-dark-mode.png',
+	} as const;
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',

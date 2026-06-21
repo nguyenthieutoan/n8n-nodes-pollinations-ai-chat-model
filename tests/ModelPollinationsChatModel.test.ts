@@ -33,7 +33,10 @@ describe('Pollinations Chat Model Community Node', () => {
 	test('should define correct node description', () => {
 		expect(node.description.displayName).toBe('Pollinations Chat Model');
 		expect(node.description.name).toBe('modelPollinationsChatModel');
-		expect(node.description.icon).toBe('file:pollinations.svg');
+		expect(node.description.icon).toEqual({
+			light: 'file:icon-light-mode.png',
+			dark: 'file:icon-dark-mode.png',
+		});
 		expect(node.description.inputs).toEqual([]);
 		expect(node.description.outputs).toContain('ai_languageModel');
 	});
