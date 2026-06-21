@@ -60,10 +60,7 @@ export class ModelPollinationsChatModel implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Pollinations Chat Model',
 		name: 'modelPollinationsChatModel',
-		icon: {
-			light: 'file:icon-light-mode.png',
-			dark: 'file:icon-dark-mode.png',
-		},
+		icon: 'file:pollinations.svg',
 		group: ['transform'],
 		version: 1,
 		description: 'Provides large language models from Pollinations.ai for intelligent agents',
