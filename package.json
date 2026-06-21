@@ -1,0 +1,61 @@
+{
+  "name": "n8n-nodes-pollinations-ai-chat-model",
+  "version": "1.0.6",
+  "description": "n8n community node for Pollinations AI Chat Model to operate AI Agents.",
+  "license": "MIT",
+  "author": {
+    "name": "Jay Nguyen (Nguyễn Thiệu Toàn)",
+    "email": "me@nguyenthieutoan.com",
+    "url": "https://nguyenthieutoan.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyenthieutoan/n8n-nodes-pollinations-ai-chat-model.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nguyenthieutoan/n8n-nodes-pollinations-ai-chat-model/issues"
+  },
+  "homepage": "https://github.com/nguyenthieutoan/n8n-nodes-pollinations-ai-chat-model#readme",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "esbuild index.ts nodes/Pollinations/ModelPollinationsChatModel.node.ts credentials/PollinationsApi.credentials.ts --bundle --platform=node --target=node22 --outdir=dist --external:n8n-workflow --external:@n8n/ai-utilities --external:@langchain/openai --external:@langchain/core && gulp build:icons",
+    "dev": "tsc --watch",
+    "test": "jest --forceExit",
+    "lint": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "n8n": {
+    "nodes": [
+      "dist/nodes/Pollinations/ModelPollinationsChatModel.node.js"
+    ],
+    "credentials": [
+      "dist/credentials/PollinationsApi.credentials.js"
+    ]
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "n8n-workflow": "^1.0.0",
+    "@langchain/openai": "*",
+    "@langchain/core": "*",
+    "@n8n/ai-utilities": "*"
+  },
+  "devDependencies": {
+    "@langchain/core": "*",
+    "@langchain/openai": "*",
+    "@n8n/ai-utilities": "*",
+    "@n8n/node-cli": "^0.23.0",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.20.0",
+    "gulp": "^4.0.2",
+    "jest": "^29.0.0",
+    "n8n-workflow": "^1.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  }
+}
