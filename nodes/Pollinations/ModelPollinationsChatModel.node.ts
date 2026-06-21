@@ -54,6 +54,8 @@ function requireN8nDependency(dependencyName: string): any {
 	throw new Error(`Could not resolve ${dependencyName} from n8n's runtime`);
 }
 
+let prototypePatched = false;
+
 export class ModelPollinationsChatModel implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Pollinations Chat Model',
@@ -294,14 +296,17 @@ export class ModelPollinationsChatModel implements INodeType {
 		const { N8nLlmTracing, logWrapper } = requireN8nDependency('@n8n/ai-utilities');
 
 		// Vá lỗi kiểm tra Prototype (instanceof Mismatch) theo Quy Chuẩn n8n
-		try {
-			const aiUtilitiesPath = require.resolve('@n8n/ai-utilities');
-			const langchainLanguageModelPath = require.resolve('@langchain/core/language_models/base', { paths: [aiUtilitiesPath] });
-			const ParentLMClass = require(langchainLanguageModelPath).BaseLanguageModel;
-			if (ParentLMClass && ParentLMClass.prototype) {
-				Object.setPrototypeOf(ChatOpenAI.prototype, ParentLMClass.prototype);
-			}
-		} catch (e) {}
+		if (!prototypePatched) {
+			try {
+				const aiUtilitiesPath = require.resolve('@n8n/ai-utilities');
+				const langchainLanguageModelPath = require.resolve('@langchain/core/language_models/base', { paths: [aiUtilitiesPath] });
+				const ParentLMClass = require(langchainLanguageModelPath).BaseLanguageModel;
+				if (ParentLMClass && ParentLMClass.prototype) {
+					Object.setPrototypeOf(ChatOpenAI.prototype, ParentLMClass.prototype);
+				}
+				prototypePatched = true;
+			} catch (e) {}
+		}
 
 		// Base configuration for OpenAI Chat completions mapping
 		const configuration: Record<string, any> = {

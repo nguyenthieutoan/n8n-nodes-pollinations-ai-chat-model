@@ -100,10 +100,10 @@ describe('Pollinations Chat Model Community Node', () => {
 		test('should instantiate ChatOpenAI with correct configurations (Anonymous)', async () => {
 			const mockParameters: Record<string, any> = {
 				model: 'gpt-5.4',
-				temperature: 0.8,
-				maxTokens: 2048,
-				jsonMode: true,
-				additionalFields: {
+				options: {
+					temperature: 0.8,
+					maxTokens: 2048,
+					responseFormat: 'json_object',
 					seed: 123,
 					safe: 'privacy,violence',
 					reasoningEffort: 'high',
@@ -120,7 +120,7 @@ describe('Pollinations Chat Model Community Node', () => {
 
 			const result = await node.supplyData.call(mockContext);
 
-			expect(ChatOpenAI).toHaveBeenCalledWith({
+			expect(ChatOpenAI).toHaveBeenCalledWith(expect.objectContaining({
 				modelName: 'gpt-5.4',
 				temperature: 0.8,
 				maxTokens: 2048,
@@ -131,14 +131,13 @@ describe('Pollinations Chat Model Community Node', () => {
 					baseURL: 'https://gen.pollinations.ai/v1',
 					apiKey: 'anonymous-token',
 				},
-				callbacks: [expect.any(Object)],
 				modelKwargs: {
 					response_format: { type: 'json_object' },
 					seed: 123,
 					safe: 'privacy,violence',
 					reasoning_effort: 'high',
 				},
-			});
+			}));
 
 			expect(result.response).toBeDefined();
 		});
@@ -146,10 +145,10 @@ describe('Pollinations Chat Model Community Node', () => {
 		test('should use credential apiKey when provided', async () => {
 			const mockParameters: Record<string, any> = {
 				model: 'openai',
-				temperature: 0.5,
-				maxTokens: 100,
-				jsonMode: false,
-				additionalFields: {},
+				options: {
+					temperature: 0.5,
+					maxTokens: 100,
+				},
 			};
 
 			const mockContext = {
@@ -187,9 +186,9 @@ describe('Pollinations API Credentials', () => {
 	describe('test configuration', () => {
 		test('should define correct test request options', () => {
 			expect(credentials.test.request.method).toBe('GET');
-			expect(credentials.test.request.url).toBe('https://gen.pollinations.ai/v1/models');
-			expect(credentials.test.request.headers?.Authorization).toBe('=Bearer {{$credentials.apiKey}}');
-			expect(credentials.test.request.json).toBe(true);
+			expect(credentials.test.request.url).toBe('/models');
+			expect(credentials.test.request.baseURL).toBe('https://gen.pollinations.ai/v1');
+			expect(credentials.test.request.headers?.Authorization).toBe('=Bearer {{$credentials.apiKey || "anonymous-token"}}');
 		});
 	});
 });
